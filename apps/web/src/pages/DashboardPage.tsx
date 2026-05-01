@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BrainCircuit, CalendarPlus, Megaphone, UserPlus } from "lucide-react";
+import { BrainCircuit, CalendarPlus, ClipboardList, CreditCard, Megaphone, UserPlus } from "lucide-react";
 
 import { fetchAnalytics } from "../lib/api";
 
@@ -43,6 +43,20 @@ export default function DashboardPage() {
           <span>
             <strong>Add people</strong>
             <small>Manage departments, batches, staff, and students.</small>
+          </span>
+        </Link>
+        <Link className="action-tile" to="/exams">
+          <ClipboardList size={20} />
+          <span>
+            <strong>Plan examinations</strong>
+            <small>Schedule exams and record student results.</small>
+          </span>
+        </Link>
+        <Link className="action-tile" to="/payments">
+          <CreditCard size={20} />
+          <span>
+            <strong>Track payments</strong>
+            <small>Create fee records and update payment status.</small>
           </span>
         </Link>
         <Link className="action-tile" to="/engagement">

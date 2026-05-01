@@ -6,8 +6,11 @@ import { Attendance } from "./models/Attendance";
 import { Batch } from "./models/Batch";
 import { Course } from "./models/Course";
 import { Department } from "./models/Department";
+import { Exam } from "./models/Exam";
+import { ExamResult } from "./models/ExamResult";
 import { Feedback } from "./models/Feedback";
 import { LeaveRequest } from "./models/LeaveRequest";
+import { Payment } from "./models/Payment";
 import { Session } from "./models/Session";
 import { StudentAttendance } from "./models/StudentAttendance";
 import { User } from "./models/User";
@@ -18,6 +21,9 @@ async function seed() {
 
   await Promise.all([
     Announcement.deleteMany({}),
+    ExamResult.deleteMany({}),
+    Exam.deleteMany({}),
+    Payment.deleteMany({}),
     Feedback.deleteMany({}),
     LeaveRequest.deleteMany({}),
     StudentAttendance.deleteMany({}),
@@ -328,6 +334,85 @@ async function seed() {
       studentId: students[6].id,
       rating: 5,
       comment: "Great examples for case studies.",
+    },
+  ]);
+
+  const [exam1, exam2, exam3] = await Exam.create([
+    {
+      title: "Algorithms Midterm",
+      courseId: algo.id,
+      batchId: batch2026.id,
+      date: dayjs().add(5, "day").format("YYYY-MM-DD"),
+      startTime: "10:00",
+      endTime: "12:00",
+      room: "Exam Hall A",
+      maxMarks: 60,
+      status: "scheduled",
+    },
+    {
+      title: "Experience Design Jury",
+      courseId: ux.id,
+      batchId: batch2025.id,
+      date: dayjs().add(8, "day").format("YYYY-MM-DD"),
+      startTime: "13:00",
+      endTime: "15:00",
+      room: "Studio 1",
+      maxMarks: 100,
+      status: "scheduled",
+    },
+    {
+      title: "Product Strategy Quiz",
+      courseId: product.id,
+      batchId: batch2024.id,
+      date: dayjs().subtract(2, "day").format("YYYY-MM-DD"),
+      startTime: "09:00",
+      endTime: "10:00",
+      room: "Boardroom",
+      maxMarks: 30,
+      status: "completed",
+    },
+  ]);
+
+  await ExamResult.create([
+    {
+      examId: exam3.id,
+      studentId: students[6].id,
+      marks: 26,
+      grade: "A",
+      remarks: "Strong case analysis.",
+    },
+    {
+      examId: exam1.id,
+      studentId: students[0].id,
+      marks: 48,
+      grade: "B+",
+      remarks: "Practice graph problems before finals.",
+    },
+  ]);
+
+  await Payment.create([
+    {
+      studentId: students[0].id,
+      title: "Semester tuition",
+      amount: 42000,
+      dueDate: dayjs().add(10, "day").format("YYYY-MM-DD"),
+      status: "pending",
+    },
+    {
+      studentId: students[1].id,
+      title: "Lab fee",
+      amount: 3500,
+      dueDate: dayjs().subtract(3, "day").format("YYYY-MM-DD"),
+      status: "overdue",
+    },
+    {
+      studentId: students[2].id,
+      title: "Studio material fee",
+      amount: 5000,
+      dueDate: dayjs().subtract(12, "day").format("YYYY-MM-DD"),
+      status: "paid",
+      paidAt: dayjs().subtract(11, "day").toISOString(),
+      method: "UPI receipt",
     },
   ]);
 

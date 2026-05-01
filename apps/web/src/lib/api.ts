@@ -90,6 +90,95 @@ export async function fetchSessions() {
   );
 }
 
+export async function fetchExams() {
+  return apiFetch<
+    Array<{
+      _id: string;
+      title: string;
+      courseId: string;
+      batchId: string;
+      date: string;
+      startTime: string;
+      endTime: string;
+      room: string | null;
+      maxMarks: number;
+      status: "scheduled" | "completed";
+    }>
+  >("/exams");
+}
+
+export async function createExam(payload: {
+  title: string;
+  courseId: string;
+  batchId: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  room?: string;
+  maxMarks: number;
+  status?: "scheduled" | "completed";
+}) {
+  return apiFetch("/exams", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function fetchExamResults() {
+  return apiFetch<
+    Array<{
+      _id: string;
+      examId: string;
+      studentId: string;
+      marks: number;
+      grade: string | null;
+      remarks: string | null;
+    }>
+  >("/exams/results");
+}
+
+export async function createExamResult(payload: {
+  examId: string;
+  studentId: string;
+  marks: number;
+  grade?: string;
+  remarks?: string;
+}) {
+  return apiFetch("/exams/results", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function fetchPayments() {
+  return apiFetch<
+    Array<{
+      _id: string;
+      studentId: string;
+      title: string;
+      amount: number;
+      dueDate: string;
+      status: "pending" | "paid" | "overdue" | "waived";
+      paidAt: string | null;
+      method: string | null;
+    }>
+  >("/payments");
+}
+
+export async function createPayment(payload: { studentId: string; title: string; amount: number; dueDate: string }) {
+  return apiFetch("/payments", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updatePaymentStatus(id: string, status: "pending" | "paid" | "overdue" | "waived", method?: string) {
+  return apiFetch(`/payments/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status, method }),
+  });
+}
+
 export async function fetchCourses() {
   return apiFetch<Array<{ _id: string; name: string; code: string; departmentId: string }>>("/courses");
 }

@@ -4,6 +4,8 @@ import {
   BarChart3,
   BrainCircuit,
   CalendarDays,
+  ClipboardList,
+  CreditCard,
   GraduationCap,
   Layers,
   LogOut,
@@ -18,6 +20,8 @@ import AiInsightsPage from "./pages/AiInsightsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import AttendancePage from "./pages/AttendancePage";
 import DashboardPage from "./pages/DashboardPage";
+import ExamsPage from "./pages/ExamsPage";
+import PaymentsPage from "./pages/PaymentsPage";
 import PeoplePage from "./pages/PeoplePage";
 import SessionsPage from "./pages/SessionsPage";
 import StudentAnnouncementsPage from "./pages/StudentAnnouncementsPage";
@@ -25,12 +29,16 @@ import StudentAttendancePage from "./pages/StudentAttendancePage";
 import StudentFeedbackPage from "./pages/StudentFeedbackPage";
 import StudentHomePage from "./pages/StudentHomePage";
 import StudentLeavePage from "./pages/StudentLeavePage";
+import StudentExamsPage from "./pages/StudentExamsPage";
+import StudentPaymentsPage from "./pages/StudentPaymentsPage";
 import StudentSchedulePage from "./pages/StudentSchedulePage";
 
 const navItems = [
   { to: "/", label: "Overview", icon: BarChart3 },
   { to: "/attendance", label: "Attendance", icon: ShieldCheck },
   { to: "/sessions", label: "Timetable", icon: CalendarDays },
+  { to: "/exams", label: "Examination", icon: ClipboardList },
+  { to: "/payments", label: "Payments", icon: CreditCard },
   { to: "/people", label: "People", icon: Users },
   { to: "/engagement", label: "Engagement", icon: Megaphone },
   { to: "/analytics", label: "Analytics", icon: Layers },
@@ -41,6 +49,8 @@ const studentNavItems = [
   { to: "/", label: "My Hub", icon: BarChart3 },
   { to: "/schedule", label: "Schedule", icon: CalendarDays },
   { to: "/attendance", label: "My Attendance", icon: ShieldCheck },
+  { to: "/exams", label: "My Exams", icon: ClipboardList },
+  { to: "/payments", label: "Payments", icon: CreditCard },
   { to: "/announcements", label: "Announcements", icon: Layers },
   { to: "/leave", label: "Leave Requests", icon: Users },
   { to: "/feedback", label: "Session Feedback", icon: BarChart3 },
@@ -235,6 +245,8 @@ export default function App() {
               <Route path="/" element={<StudentHomePage />} />
               <Route path="/schedule" element={<StudentSchedulePage />} />
               <Route path="/attendance" element={<StudentAttendancePage />} />
+              <Route path="/exams" element={<StudentExamsPage />} />
+              <Route path="/payments" element={<StudentPaymentsPage />} />
               <Route path="/announcements" element={<StudentAnnouncementsPage />} />
               <Route path="/leave" element={<StudentLeavePage />} />
               <Route path="/feedback" element={<StudentFeedbackPage />} />
@@ -276,6 +288,8 @@ export default function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/attendance" element={<AttendancePage />} />
             <Route path="/sessions" element={<SessionsPage />} />
+            <Route path="/exams" element={<ExamsPage />} />
+            <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/people" element={<PeoplePage />} />
             <Route path="/engagement" element={<AdminEngagementPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />

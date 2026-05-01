@@ -16,6 +16,8 @@ import analyticsRoutes from "./routes/analytics";
 import announcementsRoutes from "./routes/announcements";
 import feedbackRoutes from "./routes/feedback";
 import leaveRequestRoutes from "./routes/leaveRequests";
+import examRoutes from "./routes/exams";
+import paymentRoutes from "./routes/payments";
 import sessionRoutes from "./routes/sessions";
 import studentRoutes from "./routes/student";
 import userRoutes from "./routes/users";
@@ -50,6 +52,8 @@ export function createApp() {
   app.use("/analytics", analyticsRoutes);
   app.use("/announcements", announcementsRoutes);
   app.use("/leave-requests", leaveRequestRoutes);
+  app.use("/exams", examRoutes);
+  app.use("/payments", paymentRoutes);
   app.use("/feedback", feedbackRoutes);
   app.use("/student", studentRoutes);
   app.use("/users", userRoutes);
