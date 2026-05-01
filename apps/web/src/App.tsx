@@ -1,9 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
-import { BarChart3, CalendarDays, Layers, LogOut, Megaphone, ShieldCheck, Users } from "lucide-react";
+import {
+  BarChart3,
+  BrainCircuit,
+  CalendarDays,
+  GraduationCap,
+  Layers,
+  LogOut,
+  Megaphone,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 
 import { bootstrapAdmin, fetchAuthStatus, fetchMe, login, logout } from "./lib/api";
 import AdminEngagementPage from "./pages/AdminEngagementPage";
+import AiInsightsPage from "./pages/AiInsightsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import AttendancePage from "./pages/AttendancePage";
 import DashboardPage from "./pages/DashboardPage";
@@ -23,6 +34,7 @@ const navItems = [
   { to: "/people", label: "People", icon: Users },
   { to: "/engagement", label: "Engagement", icon: Megaphone },
   { to: "/analytics", label: "Analytics", icon: Layers },
+  { to: "/ai", label: "Campus AI", icon: BrainCircuit },
 ];
 
 const studentNavItems = [
@@ -32,6 +44,12 @@ const studentNavItems = [
   { to: "/announcements", label: "Announcements", icon: Layers },
   { to: "/leave", label: "Leave Requests", icon: Users },
   { to: "/feedback", label: "Session Feedback", icon: BarChart3 },
+];
+
+const demoAccounts = [
+  { label: "Admin", email: "admin@vibhaag.dev", password: "admin123" },
+  { label: "Faculty", email: "rhea@vibhaag.dev", password: "faculty123" },
+  { label: "Student", email: "ira@vibhaag.dev", password: "student123" },
 ];
 
 function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
@@ -58,10 +76,30 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
     <div className="login-shell">
       <form className="login-card fade-in" onSubmit={handleSubmit}>
         <div>
+          <div className="brand-lockup">
+            <span className="brand-mark">
+              <GraduationCap size={22} />
+            </span>
+            <span>Vibhaag</span>
+          </div>
           <h2>Welcome back</h2>
           <p>Sign in to track attendance, sessions, and analytics.</p>
         </div>
-        <div className="notice">Seeded login: admin@vibhaag.dev / admin123</div>
+        <div className="demo-strip">
+          {demoAccounts.map((account) => (
+            <button
+              className="demo-chip"
+              key={account.label}
+              type="button"
+              onClick={() => {
+                setEmail(account.email);
+                setPassword(account.password);
+              }}
+            >
+              {account.label}
+            </button>
+          ))}
+        </div>
         <label className="input">
           Email
           <input value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -167,9 +205,14 @@ export default function App() {
       return (
         <div className="app-shell fade-in">
           <aside className="sidebar">
-            <div>
-              <h1>Vibhaag</h1>
-              <p>{user.name}</p>
+            <div className="sidebar-brand">
+              <span className="brand-mark">
+                <GraduationCap size={20} />
+              </span>
+              <div>
+                <h1>Vibhaag</h1>
+                <p>{user.name}</p>
+              </div>
             </div>
             <nav className="nav-group">
               {studentNavItems.map((item) => (
@@ -203,9 +246,14 @@ export default function App() {
     return (
       <div className="app-shell fade-in">
         <aside className="sidebar">
-          <div>
-            <h1>Vibhaag</h1>
-            <p>{user.name}</p>
+          <div className="sidebar-brand">
+            <span className="brand-mark">
+              <GraduationCap size={20} />
+            </span>
+            <div>
+              <h1>Vibhaag</h1>
+              <p>{user.name}</p>
+            </div>
           </div>
           <nav className="nav-group">
             {navItems.map((item) => (
@@ -231,6 +279,7 @@ export default function App() {
             <Route path="/people" element={<PeoplePage />} />
             <Route path="/engagement" element={<AdminEngagementPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/ai" element={<AiInsightsPage />} />
           </Routes>
         </main>
       </div>

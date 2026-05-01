@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { fetchAnnouncements, fetchLeaveRequests, fetchStudentAttendance, fetchStudentSchedule } from "../lib/api";
 
@@ -36,7 +37,9 @@ export default function StudentHomePage() {
           <h2>Your attendance and class updates in one feed.</h2>
           <p>Check in, request leave, and stay on top of announcements.</p>
         </div>
-        <button className="button">Request leave</button>
+        <Link className="button" to="/leave">
+          Request leave
+        </Link>
       </section>
 
       <section className="grid">
@@ -80,6 +83,13 @@ export default function StudentHomePage() {
                   </td>
                 </tr>
               ))}
+              {upcoming.length === 0 ? (
+                <tr>
+                  <td data-label="Schedule" colSpan={3}>
+                    No upcoming sessions assigned.
+                  </td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   createBatch,
@@ -34,6 +34,8 @@ export default function PeoplePage() {
   const [batchName, setBatchName] = useState("");
   const [batchYear, setBatchYear] = useState("2026");
   const [batchDepartmentId, setBatchDepartmentId] = useState("");
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
 
   useEffect(() => {
     fetchUsers().then(setUsers).catch(() => setUsers([]));
@@ -112,8 +114,50 @@ export default function PeoplePage() {
     }
   };
 
+  const filteredUsers = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase();
+    return users.filter((user) => {
+      const matchesSearch =
+        normalizedSearch.length === 0 ||
+        user.name.toLowerCase().includes(normalizedSearch) ||
+        user.email.toLowerCase().includes(normalizedSearch) ||
+        (user.rollNumber ?? "").toLowerCase().includes(normalizedSearch);
+      const matchesRole = roleFilter === "all" || user.role === roleFilter;
+      return matchesSearch && matchesRole;
+    });
+  }, [roleFilter, search, users]);
+
+  const rosterStats = useMemo(
+    () => ({
+      total: users.length,
+      faculty: users.filter((user) => user.role === "faculty").length,
+      students: users.filter((user) => user.role === "student").length,
+      admins: users.filter((user) => user.role === "admin").length,
+    }),
+    [users]
+  );
+
   return (
     <div className="grid">
+      <section className="metric-strip wide-card">
+        <div>
+          <span>Total people</span>
+          <strong>{rosterStats.total}</strong>
+        </div>
+        <div>
+          <span>Faculty</span>
+          <strong>{rosterStats.faculty}</strong>
+        </div>
+        <div>
+          <span>Students</span>
+          <strong>{rosterStats.students}</strong>
+        </div>
+        <div>
+          <span>Admins</span>
+          <strong>{rosterStats.admins}</strong>
+        </div>
+      </section>
+
       <div className="card">
         <div className="section-title">
           <h3>Departments & batches</h3>
@@ -237,6 +281,22 @@ export default function PeoplePage() {
         <div className="section-title">
           <h3>Directory</h3>
         </div>
+        <div className="toolbar">
+          <label className="input">
+            Search directory
+            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Name, email, roll no" />
+          </label>
+          <label className="input">
+            Role
+            <select value={roleFilter} onChange={(event) => setRoleFilter(event.target.value)}>
+              <option value="all">All roles</option>
+              <option value="admin">Admins</option>
+              <option value="faculty">Faculty</option>
+              <option value="staff">Staff</option>
+              <option value="student">Students</option>
+            </select>
+          </label>
+        </div>
         <div className="table-wrap">
           <table className="table">
             <thead>
@@ -248,7 +308,7 @@ export default function PeoplePage() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user._id}>
                   <td data-label="Name">{user.name}</td>
                   <td data-label="Email">{user.email}</td>
@@ -256,6 +316,13 @@ export default function PeoplePage() {
                   <td data-label="Roll no">{user.rollNumber ?? "--"}</td>
                 </tr>
               ))}
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td data-label="Directory" colSpan={4}>
+                    No matching people found.
+                  </td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>

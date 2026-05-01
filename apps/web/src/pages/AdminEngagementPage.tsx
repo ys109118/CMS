@@ -121,13 +121,15 @@ export default function AdminEngagementPage() {
         <div className="section-title">
           <h3>Latest announcements</h3>
         </div>
-        {announcements.map((item) => (
-          <div className="card" key={item._id}>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
-            <p>Audience: {item.audience}</p>
-          </div>
-        ))}
+        <div className="announcement-list">
+          {announcements.map((item) => (
+            <div className="announcement-item" key={item._id}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+              <p>Audience: {item.audience}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="card">
@@ -182,7 +184,7 @@ export default function AdminEngagementPage() {
             <tbody>
               {feedback.map((item) => (
                 <tr key={item._id}>
-                  <td data-label="Rating">{item.rating}★</td>
+                  <td data-label="Rating">{item.rating}/5</td>
                   <td data-label="Comment">{item.comment ?? "--"}</td>
                 </tr>
               ))}

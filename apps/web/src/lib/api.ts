@@ -59,6 +59,31 @@ export async function fetchAnalytics() {
   }>("/analytics/overview");
 }
 
+export async function fetchAiInsights() {
+  return apiFetch<{
+    generatedAt: string;
+    summary: {
+      riskScore: number;
+      riskLevel: "low" | "medium" | "high";
+      totalSessions: number;
+      totalStudents: number;
+      totalFaculty: number;
+      facultyCompletionRate: number;
+      studentParticipationRate: number;
+      feedbackAverage: number;
+      pendingLeaves: number;
+    };
+    cards: Array<{
+      title: string;
+      severity: "low" | "medium" | "high";
+      value: string;
+      insight: string;
+      action: string;
+    }>;
+    recommendations: string[];
+  }>("/ai/insights");
+}
+
 export async function fetchSessions() {
   return apiFetch<Array<{ _id: string; title: string; dayOfWeek: number; startTime: string; endTime: string }>>(
     "/sessions"

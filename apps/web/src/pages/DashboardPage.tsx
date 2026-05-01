@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { BrainCircuit, CalendarPlus, Megaphone, UserPlus } from "lucide-react";
 
 import { fetchAnalytics } from "../lib/api";
 
@@ -23,7 +25,40 @@ export default function DashboardPage() {
           <h2>Attendance, insights, and timetable in one place.</h2>
           <p>Track daily participation, manage sessions, and spotlight faculty activity in real time.</p>
         </div>
-        <button className="button">Create session</button>
+        <Link className="button" to="/sessions">
+          <CalendarPlus size={18} /> Create session
+        </Link>
+      </section>
+
+      <section className="quick-actions" aria-label="Quick actions">
+        <Link className="action-tile" to="/sessions">
+          <CalendarPlus size={20} />
+          <span>
+            <strong>Schedule a class</strong>
+            <small>Create courses and timetable sessions.</small>
+          </span>
+        </Link>
+        <Link className="action-tile" to="/people">
+          <UserPlus size={20} />
+          <span>
+            <strong>Add people</strong>
+            <small>Manage departments, batches, staff, and students.</small>
+          </span>
+        </Link>
+        <Link className="action-tile" to="/engagement">
+          <Megaphone size={20} />
+          <span>
+            <strong>Publish an update</strong>
+            <small>Send announcements and review campus signals.</small>
+          </span>
+        </Link>
+        <Link className="action-tile" to="/ai">
+          <BrainCircuit size={20} />
+          <span>
+            <strong>Open Campus AI</strong>
+            <small>Review risk signals and suggested actions.</small>
+          </span>
+        </Link>
       </section>
 
       <section className="grid">
@@ -49,7 +84,7 @@ export default function DashboardPage() {
         </div>
         <div className="card">
           <h3>Signals</h3>
-          <div className="kpi">{analytics?.signals.feedbackAvg ?? 0}★</div>
+          <div className="kpi">{analytics?.signals.feedbackAvg ?? 0}/5</div>
           <p>{analytics?.signals.pendingLeaves ?? 0} leave requests pending.</p>
         </div>
       </section>

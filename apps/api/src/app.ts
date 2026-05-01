@@ -11,6 +11,7 @@ import attendanceRoutes from "./routes/attendance";
 import batchRoutes from "./routes/batches";
 import courseRoutes from "./routes/courses";
 import departmentRoutes from "./routes/departments";
+import aiRoutes from "./routes/ai";
 import analyticsRoutes from "./routes/analytics";
 import announcementsRoutes from "./routes/announcements";
 import feedbackRoutes from "./routes/feedback";
@@ -41,6 +42,7 @@ export function createApp() {
 
   app.use("/auth", authRoutes);
   app.use("/departments", departmentRoutes);
+  app.use("/ai", aiRoutes);
   app.use("/courses", courseRoutes);
   app.use("/batches", batchRoutes);
   app.use("/sessions", sessionRoutes);

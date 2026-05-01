@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { createCourse, createSession, fetchBatches, fetchCourses, fetchDepartments, fetchSessions } from "../lib/api";
 
@@ -30,6 +30,8 @@ export default function SessionsPage() {
   const [endTime, setEndTime] = useState("10:00");
   const [room, setRoom] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [dayFilter, setDayFilter] = useState("all");
 
   useEffect(() => {
     fetchSessions().then(setSessions).catch(() => setSessions([]));
@@ -86,8 +88,35 @@ export default function SessionsPage() {
     }
   };
 
+  const filteredSessions = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    return sessions.filter((session) => {
+      const matchesQuery = normalizedQuery.length === 0 || session.title.toLowerCase().includes(normalizedQuery);
+      const matchesDay = dayFilter === "all" || session.dayOfWeek === Number(dayFilter);
+      return matchesQuery && matchesDay;
+    });
+  }, [dayFilter, query, sessions]);
+
+  const sessionsByDay = useMemo(
+    () =>
+      days.map((day, index) => ({
+        day,
+        count: sessions.filter((session) => session.dayOfWeek === index).length,
+      })),
+    [sessions]
+  );
+
   return (
     <div className="grid">
+      <section className="week-strip wide-card">
+        {sessionsByDay.map((item) => (
+          <div className={item.count > 0 ? "day-pill active" : "day-pill"} key={item.day}>
+            <span>{item.day}</span>
+            <strong>{item.count}</strong>
+          </div>
+        ))}
+      </section>
+
       <div className="card">
         <div className="section-title">
           <h3>Create course</h3>
@@ -182,6 +211,23 @@ export default function SessionsPage() {
         <div className="section-title">
           <h3>Timetable</h3>
         </div>
+        <div className="toolbar">
+          <label className="input">
+            Search sessions
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Session title" />
+          </label>
+          <label className="input">
+            Day
+            <select value={dayFilter} onChange={(event) => setDayFilter(event.target.value)}>
+              <option value="all">All days</option>
+              {days.map((day, index) => (
+                <option key={day} value={index}>
+                  {day}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
         <div className="table-wrap">
           <table className="table">
             <thead>
@@ -192,7 +238,7 @@ export default function SessionsPage() {
               </tr>
             </thead>
             <tbody>
-              {sessions.map((session) => (
+              {filteredSessions.map((session) => (
                 <tr key={session._id}>
                   <td data-label="Session">{session.title}</td>
                   <td data-label="Day">{days[session.dayOfWeek]}</td>
@@ -201,6 +247,13 @@ export default function SessionsPage() {
                   </td>
                 </tr>
               ))}
+              {filteredSessions.length === 0 ? (
+                <tr>
+                  <td data-label="Timetable" colSpan={3}>
+                    No matching sessions found.
+                  </td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>

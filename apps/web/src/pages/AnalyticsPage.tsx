@@ -39,7 +39,7 @@ export default function AnalyticsPage() {
       </div>
       <div className="card">
         <h3>Feedback average</h3>
-        <div className="kpi">{analytics?.signals.feedbackAvg ?? 0}★</div>
+        <div className="kpi">{analytics?.signals.feedbackAvg ?? 0}/5</div>
         <p>Average session rating.</p>
       </div>
       <div className="card">

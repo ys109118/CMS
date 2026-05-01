@@ -25,17 +25,19 @@ export default function AttendancePage() {
     <div className="grid">
       <div className="card">
         <div className="section-title">
-          <h3>Today’s sessions</h3>
+          <h3>Today's sessions</h3>
           <button className="button secondary">Auto-assign</button>
         </div>
         <p>Tap to check in for your upcoming sessions.</p>
-        <div className="grid">
+        <div className="session-list">
           {sessions.map((session) => (
-            <div className="card" key={session._id}>
-              <h3>{session.title}</h3>
-              <p>
-                {session.startTime} - {session.endTime}
-              </p>
+            <div className="session-row" key={session._id}>
+              <div>
+                <h3>{session.title}</h3>
+                <p>
+                  {session.startTime} - {session.endTime}
+                </p>
+              </div>
               <button className="button" onClick={() => handleCheckIn(session._id)}>
                 Check in
               </button>
